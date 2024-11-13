@@ -6,6 +6,7 @@ using CourseApp.ServiceLayer.Abstract;
 using CourseApp.ServiceLayer.Utilities.Constants;
 using CourseApp.ServiceLayer.Utilities.Result;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace CourseApp.ServiceLayer.Concrete;
 
@@ -25,18 +26,18 @@ public class ExamResultManager : IExamResultService
     {
         var examResultList = await _unitOfWork.ExamResults.GetAll(false).ToListAsync();
         var examResultListMapping = _mapper.Map<IEnumerable<GetAllExamResultDto>>(examResultList);
-        if(examResultList != null)
+        if (!examResultList.Any())
         {
-            return new SuccessDataResult<IEnumerable<GetAllExamResultDto>>(examResultListMapping,ConstantsMessages.ExamResultListSuccessMessage);
+            return new ErrorDataResult<IEnumerable<GetAllExamResultDto>>(null, ConstantsMessages.ExamResultListFailedMessage);
         }
+        return new SuccessDataResult<IEnumerable<GetAllExamResultDto>>(examResultListMapping, ConstantsMessages.ExamResultListSuccessMessage);
 
-        return new ErrorDataResult<IEnumerable<GetAllExamResultDto>>(null, ConstantsMessages.ExamResultListFailedMessage);
     }
 
     public async Task<IDataResult<GetByIdExamResultDto>> GetByIdAsync(string id, bool track = true)
     {
         var hasExamResult = await _unitOfWork.ExamResults.GetByIdAsync(id, false);
-        if(hasExamResult != null)
+        if (hasExamResult != null)
         {
             var examResultMapping = _mapper.Map<GetByIdExamResultDto>(hasExamResult);
             return new SuccessDataResult<GetByIdExamResultDto>(examResultMapping, ConstantsMessages.ExamResultListSuccessMessage);
@@ -49,7 +50,7 @@ public class ExamResultManager : IExamResultService
         var addedExamResultMapping = _mapper.Map<ExamResult>(entity);
         await _unitOfWork.ExamResults.CreateAsync(addedExamResultMapping);
         var result = await _unitOfWork.CommitAsync();
-        if(result > 0)
+        if (result > 0)
         {
             return new SuccessResult(ConstantsMessages.ExamResultCreateSuccessMessage);
         }
@@ -60,8 +61,8 @@ public class ExamResultManager : IExamResultService
     {
         var deletedExamResultMapping = _mapper.Map<ExamResult>(entity);
         _unitOfWork.ExamResults.Remove(deletedExamResultMapping);
-        var result = await _unitOfWork.CommitAsync();    
-        if(result > 0)
+        var result = await _unitOfWork.CommitAsync();
+        if (result > 0)
         {
             return new SuccessResult(ConstantsMessages.ExamResultDeleteSuccessMessage);
         }
@@ -73,10 +74,35 @@ public class ExamResultManager : IExamResultService
         var updatedExamResultMapping = _mapper.Map<ExamResult>(entity);
         _unitOfWork.ExamResults.Update(updatedExamResultMapping);
         var result = await _unitOfWork.CommitAsync();
-        if(result > 0)
+        if (result > 0)
         {
             return new SuccessResult(ConstantsMessages.ExamResultUpdateSuccessMessage);
         }
         return new ErrorResult(ConstantsMessages.ExamResultUpdateFailedMessage);
+    }
+
+    public async Task<IDataResult<IEnumerable<GetAllExamResultDetailDto>>> GetAllExamResultDetailAsync(bool track = true)
+    {
+        var examResultList = await _unitOfWork.ExamResults.GetAllExamResultDetail(false).ToListAsync();
+        if (!examResultList.Any())
+        {
+            return new ErrorDataResult<IEnumerable<GetAllExamResultDetailDto>>(null, ConstantsMessages.ExamResultListFailedMessage);
+        }
+
+        var examResultListMapping = _mapper.Map<IEnumerable<GetAllExamResultDetailDto>>(examResultList);
+        return new SuccessDataResult<IEnumerable<GetAllExamResultDetailDto>>(examResultListMapping, ConstantsMessages.ExamResultListSuccessMessage);
+    }
+
+    public async Task<IDataResult<GetByIdExamResultDetailDto>> GetByIdExamResultDetailAsync(string id, bool track = true)
+    {
+        var examResult = await _unitOfWork.ExamResults.GetByIdExamResultDetailAsync(id, false);
+        if (examResult == null)
+        {
+            return new ErrorDataResult<GetByIdExamResultDetailDto>(null, ConstantsMessages.ExamResultGetByIdFailedMessage);
+        }
+
+        var examResultMapping = _mapper.Map<GetByIdExamResultDetailDto>(examResult);
+        return new SuccessDataResult<GetByIdExamResultDetailDto>(examResultMapping, ConstantsMessages.CourseListSuccessMessage);
+
     }
 }

@@ -23,20 +23,20 @@ public class InstructorManager : IInstructorService
     {
         var instructorList = await _unitOfWork.Instructors.GetAll(false).ToListAsync();
         var instructorListMapping = _mapper.Map<IEnumerable<GetAllInstructorDto>>(instructorList);
-        if(instructorList != null)
+        if (!instructorList.Any())
         {
-            return new SuccessDataResult<IEnumerable<GetAllInstructorDto>>(instructorListMapping, ConstantsMessages.InstructorListSuccessMessage);
+            return new ErrorDataResult<IEnumerable<GetAllInstructorDto>>(null, ConstantsMessages.InstructorListFailedMessage);
         }
-        return new ErrorDataResult<IEnumerable<GetAllInstructorDto>>(null, ConstantsMessages.InstructorListFailedMessage);
+        return new SuccessDataResult<IEnumerable<GetAllInstructorDto>>(instructorListMapping, ConstantsMessages.InstructorListSuccessMessage);
     }
 
     public async Task<IDataResult<GetByIdInstructorDto>> GetByIdAsync(string id, bool track = true)
     {
         var hasInstructor = await _unitOfWork.Instructors.GetByIdAsync(id, false);
-        if(hasInstructor != null)
+        if (hasInstructor != null)
         {
             var hasInstructorMapping = _mapper.Map<GetByIdInstructorDto>(hasInstructor);
-            return new SuccessDataResult<GetByIdInstructorDto>(hasInstructorMapping,ConstantsMessages.InstructorGetByIdSuccessMessage); 
+            return new SuccessDataResult<GetByIdInstructorDto>(hasInstructorMapping, ConstantsMessages.InstructorGetByIdSuccessMessage);
 
         }
 
@@ -48,11 +48,11 @@ public class InstructorManager : IInstructorService
         var createdInstructor = _mapper.Map<Instructor>(entity);
         await _unitOfWork.Instructors.CreateAsync(createdInstructor);
         var result = await _unitOfWork.CommitAsync();
-        if(result > 0)
+        if (result > 0)
         {
             return new SuccessResult(ConstantsMessages.InstructorCreateSuccessMessage);
         }
-        return new ErrorResult(ConstantsMessages.InstructorCreateFailedMessage);    
+        return new ErrorResult(ConstantsMessages.InstructorCreateFailedMessage);
     }
 
     public async Task<IResult> Remove(DeletedInstructorDto entity)
@@ -60,11 +60,11 @@ public class InstructorManager : IInstructorService
         var deletedInstructor = _mapper.Map<Instructor>(entity);
         _unitOfWork.Instructors.Remove(deletedInstructor);
         var result = await _unitOfWork.CommitAsync();
-        if(result > 0)
+        if (result > 0)
         {
             return new SuccessResult(ConstantsMessages.InstructorDeleteSuccessMessage);
         }
-        return new ErrorResult(ConstantsMessages.InstructorDeleteFailedMessage);    
+        return new ErrorResult(ConstantsMessages.InstructorDeleteFailedMessage);
     }
 
     public async Task<IResult> Update(UpdatedInstructorDto entity)
@@ -72,7 +72,7 @@ public class InstructorManager : IInstructorService
         var updatedInstructor = _mapper.Map<Instructor>(entity);
         _unitOfWork.Instructors.Update(updatedInstructor);
         var result = await _unitOfWork.CommitAsync();
-        if(result > 0)
+        if (result > 0)
         {
             return new SuccessResult(ConstantsMessages.InstructorUpdateSuccessMessage);
         }

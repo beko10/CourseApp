@@ -23,11 +23,11 @@ public class LessonsManager : ILessonService
     {
         var lessonList = await _unitOfWork.Lessons.GetAll(false).ToListAsync();
         var lessonListMapping = _mapper.Map<IEnumerable<GetAllLessonDto>>(lessonList);
-        if (lessonList != null)
+        if (!lessonList.Any())
         {
-            return new SuccessDataResult<IEnumerable<GetAllLessonDto>>(lessonListMapping, ConstantsMessages.LessonListSuccessMessage);
+            return new ErrorDataResult<IEnumerable<GetAllLessonDto>>(null, ConstantsMessages.LessonListFailedMessage);
         }
-        return new ErrorDataResult<IEnumerable<GetAllLessonDto>>(null, ConstantsMessages.LessonListFailedMessage);
+        return new SuccessDataResult<IEnumerable<GetAllLessonDto>>(lessonListMapping, ConstantsMessages.LessonListSuccessMessage);
     }
 
     public async Task<IDataResult<GetByIdLessonDto>> GetByIdAsync(string id, bool track = true)
@@ -52,7 +52,7 @@ public class LessonsManager : ILessonService
         {
             return new SuccessResult(ConstantsMessages.LessonCreateSuccessMessage);
         }
-        
+
         return new ErrorResult(ConstantsMessages.LessonCreateFailedMessage);
     }
 

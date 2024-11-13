@@ -24,12 +24,12 @@ public class ExamManager : IExamService
     {
         var examList = await _unitOfWork.Exams.GetAll(false).ToListAsync();
         var examtListMapping = _mapper.Map<IEnumerable<GetAllExamDto>>(examList);
-        if (examList != null)
+        if (!examList.Any())
         {
-            return new SuccessDataResult<IEnumerable<GetAllExamDto>>(examtListMapping, ConstantsMessages.ExamListSuccessMessage);
+            return new ErrorDataResult<IEnumerable<GetAllExamDto>>(null, ConstantsMessages.ExamListFailedMessage);
         }
+        return new SuccessDataResult<IEnumerable<GetAllExamDto>>(examtListMapping, ConstantsMessages.ExamListSuccessMessage);
 
-        return new ErrorDataResult<IEnumerable<GetAllExamDto>>(null, ConstantsMessages.ExamListFailedMessage);
     }
 
     public async Task<IDataResult<GetByIdExamDto>> GetByIdAsync(string id, bool track = true)

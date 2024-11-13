@@ -23,11 +23,11 @@ public class RegistrationManager : IRegistrationService
     {
         var registrationList = await _unitOfWork.Registrations.GetAll(false).ToListAsync();
         var registrationListMapping = _mapper.Map<IEnumerable<GetAllRegistrationDto>>(registrationList);
-        if (registrationList != null)
+        if (!registrationList.Any())
         {
-            return new SuccessDataResult<IEnumerable<GetAllRegistrationDto>>(registrationListMapping, ConstantsMessages.RegistrationListSuccessMessage);
+            return new ErrorDataResult<IEnumerable<GetAllRegistrationDto>>(null, ConstantsMessages.RegistrationListFailedMessage);
         }
-        return new ErrorDataResult<IEnumerable<GetAllRegistrationDto>>(null, ConstantsMessages.RegistrationListFailedMessage);
+        return new SuccessDataResult<IEnumerable<GetAllRegistrationDto>>(registrationListMapping, ConstantsMessages.RegistrationListSuccessMessage);
     }
 
     public async Task<IDataResult<GetByIdRegistrationDto>> GetByIdAsync(string id, bool track = true)

@@ -22,18 +22,18 @@ public class StudentManager : IStudentService
 
     public async Task<IDataResult<IEnumerable<GetAllStudentDto>>> GetAllAsync(bool track = true)
     {
-        var studentList = await _unitOfWork.Registrations.GetAll(false).ToListAsync();
+        var studentList = await _unitOfWork.Students.GetAll(false).ToListAsync();
         var studentListMapping = _mapper.Map<IEnumerable<GetAllStudentDto>>(studentList);
-        if (studentList != null)
+        if (!studentList.Any())
         {
-            return new SuccessDataResult<IEnumerable<GetAllStudentDto>>(studentListMapping, ConstantsMessages.StudentListSuccessMessage);
+            return new ErrorDataResult<IEnumerable<GetAllStudentDto>>(null, ConstantsMessages.StudentListFailedMessage);
         }
-        return new ErrorDataResult<IEnumerable<GetAllStudentDto>>(null, ConstantsMessages.StudentListFailedMessage);
+        return new SuccessDataResult<IEnumerable<GetAllStudentDto>>(studentListMapping, ConstantsMessages.StudentListSuccessMessage);
     }
 
     public async Task<IDataResult<GetByIdStudentDto>> GetByIdAsync(string id, bool track = true)
     {
-        var hasStudent = await _unitOfWork.Registrations.GetByIdAsync(id, false);
+        var hasStudent = await _unitOfWork.Students.GetByIdAsync(id, false);
         if (hasStudent != null)
         {
             var hasStudentMapping = _mapper.Map<GetByIdStudentDto>(hasStudent);

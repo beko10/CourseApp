@@ -12,6 +12,16 @@ public class ExamResultMapping:Profile
         CreateMap<ExamResult,GetByIdExamResultDto>().ReverseMap();
         CreateMap<ExamResult,CreateExamResultDto>().ReverseMap();
         CreateMap<ExamResult,UpdateExamResultDto>().ReverseMap();
-        CreateMap<ExamResult,DeleteExamResultDto>().ReverseMap();
+        CreateMap<ExamResult, DeleteExamResultDto>().ReverseMap();
+        CreateMap<ExamResult, GetAllExamResultDetailDto>()
+            .ForMember(dst => dst.StudentName,opt => opt.MapFrom(src => src.Student!.Name))
+            .ForMember(dst => dst.StudentSurname,opt => opt.MapFrom(src => src.Student!.Surname))
+            .ForMember(dst => dst.ExamName,opt => opt.MapFrom(src => src.Exam!.Name))
+            .ReverseMap();
+       CreateMap<ExamResult,GetByIdExamResultDetailDto>()
+            .ForMember(dst => dst.StudentName, opt => opt.MapFrom(src => src.Student!.Name))
+            .ForMember(dst => dst.StudentSurname, opt => opt.MapFrom(src => src.Student!.Surname))
+            .ForMember(dst => dst.ExamName, opt => opt.MapFrom(src => src.Exam!.Name))
+            .ReverseMap();
     }
 }
