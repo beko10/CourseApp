@@ -1,0 +1,23 @@
+Yapýlacaklar:
+
+1-Projeyi EF Core alt yapýsý ile oluþturunuz. Veritabaný iþlemleri için EF Core Code First yaklaþýmýný kullanýnýz.
+
+2-Uygulamada yer alacak entityler aþaðýda belirtilmiþtir ve sizin oluþturmanýz istenmektedir.
+Course, Exam, ExamResult, Instructor, Student, Registration, Lesson
+
+3-Form1 ana form olup MDIContainer olarak tanýmlanmasý gerekmektedir. Diðer tüm formlar bu ana formun içerisinde kalacak þekilde açýlactýr.
+	Açýk olan formun tekrar açýlmasýný engelleyecek bir metod oluþturunuz.
+
+4-Uygulama repository pattern mantýðýnda geliþtirilecektir. Bu nedenle ilgili tüm Repository, Manager, IRepository, GenericRepository sýnýflar oluþturulmalýdýr.
+
+4-Ana menüde yer alan "Program Tanýmlarý" baþlýðý altýnda tüm entitylerin ekle sil güncelle ve listele iþlemleri eksiksiz olarak yapýlacaktýr.
+
+5-Ana menüden yer alan iþlemler menusu altýnda öðrenci kayýt iþlemi yapýlacaktýr. 
+
+6-Form1 isimli ana form üzerinde bazý istatistiki bilgiler bulunmaktadýr. Bunlarýnda kodlanmasý gerekmektedir.
+
+NOT: Tüm formlarda sabit olarak kaydet, sil, güncelle, listele butonlarýnýn var olmasýný aðlamak için bir adet BaseForm oluþturulmuþ ve oluþturulan tüm formlar bu baseformdan türetilmiþtir. 
+Bu nedenle kaydet vs. butonlarýnýn click eventi yoktur. Ýlgili formun backend kýsmýndý override ederek eriþebilir ve kullanabilirsiniz.
+
+
+
