@@ -1,154 +1,134 @@
-﻿using CourseApp.EntityLayer.Dto.InstructorDto;
+﻿using CourseApp.DesktopUI.Utilities;
+using CourseApp.EntityLayer.Dto.InstructorDto;
 using CourseApp.ServiceLayer.Abstract;
 
-namespace CourseApp.DesktopUI.Forms
+namespace CourseApp.DesktopUI.Forms;
+
+public partial class InstructorForm : BaseForm
 {
-    public partial class InstructorForm : BaseForm
+    private readonly IInstructorService _instructorService;
+
+    public InstructorForm(IInstructorService instructorService)
     {
-        private readonly IInstructorService _instructorService;
-        private string selectedInstructorId;
+        InitializeComponent();
+        _instructorService = instructorService;
+    }
 
-        public InstructorForm(IInstructorService instructorService)
+    private async void InstructorForm_Load(object sender, EventArgs e)
+    {
+        await InstructorLoad();
+    }
+
+    private async Task InstructorLoad()
+    {
+        var instructorList = await _instructorService.GetAllAsync(false);
+        lstListe.DataSource = instructorList.Data;
+        lstListe.DisplayMember = "FullName";
+        lstListe.ValueMember = "ID";
+    }
+
+    protected override async void btnList_Click(object sender, EventArgs e)
+    {
+        await InstructorLoad();
+    }
+
+    private async void lstListe_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        string instructorId = lstListe.SelectedValue.ToString();
+
+        var instructor = await _instructorService.GetByIdAsync(instructorId,false);
+
+        if (instructor.IsSuccess)
         {
-            InitializeComponent();
-            _instructorService = instructorService;
+            txtAd.Text = instructor.Data.Name;
+            txtSoyad.Text = instructor.Data.Surname;
+            txtEmail.Text = instructor.Data.Email;
+            txtUzmanlik.Text = instructor.Data.Professions;
+            txtTelefon.Text = instructor.Data.PhoneNumber;
         }
 
-        protected override async void btnSave_Click(object sender, EventArgs e)
+    }
+
+    protected async override void btnSave_Click(object sender, EventArgs e)
+    {
+        CreatedInstructorDto createdInstructorDto = new()
         {
-            if (string.IsNullOrWhiteSpace(txtAd.Text) || string.IsNullOrWhiteSpace(txtSoyad.Text))
-            {
-                MessageBox.Show("Ad ve soyad alanları boş bırakılamaz!");
-                return;
-            }
+            Name = txtAd.Text,
+            Surname = txtSoyad.Text,
+            Email = txtEmail.Text,
+            PhoneNumber = txtTelefon.Text,
+            Professions = txtUzmanlik.Text,
+        };
 
-            CreatedInstructorDto createInstructorDto = new CreatedInstructorDto
-            {
-                Name = txtAd.Text,
-                Surname = txtSoyad.Text,
-                Email = txtEmail.Text,
-                Professions = txtUzmanlik.Text,
-                PhoneNumber = txtTelefon.Text
-            };
-
-            var result = await _instructorService.CreateAsync(createInstructorDto);
+        var result = await _instructorService.CreateAsync(createdInstructorDto);
+        if (result.IsSuccess)
+        {
             MessageBox.Show(result.Message);
-            if (result.IsSuccess)
-            {
-                ClearForm();
-                await LoadInstructors();
-            }
         }
-
-        protected override async void btnDelete_Click(object sender, EventArgs e)
+        else
         {
-            if (string.IsNullOrWhiteSpace(selectedInstructorId))
-            {
-                MessageBox.Show("Lütfen silinecek eğitmeni seçiniz.");
-                return;
-            }
-
-            DeletedInstructorDto deletedInstructorDto = new DeletedInstructorDto
-            {
-                Id = selectedInstructorId,
-                Name = txtAd.Text,
-                Surname = txtSoyad.Text,
-                Email = txtEmail.Text,
-                Professions = txtUzmanlik.Text,
-                PhoneNumber = txtTelefon.Text
-            };
-
-            var result = await _instructorService.Remove(deletedInstructorDto);
             MessageBox.Show(result.Message);
-            if (result.IsSuccess)
-            {
-                ClearForm();
-                await LoadInstructors();
-            }
         }
+    }
 
-        protected override async void btnUpdate_Click(object sender, EventArgs e)
+    protected override async void btnUpdate_Click(object sender, EventArgs e)
+    {
+        if(lstListe.SelectedItems != null)
         {
-            if (string.IsNullOrWhiteSpace(selectedInstructorId))
+            UpdatedInstructorDto updatedInstructorDto = new()
             {
-                MessageBox.Show("Lütfen güncellenecek eğitmeni seçiniz.");
-                return;
-            }
-
-            UpdatedInstructorDto updatedInstructorDto = new UpdatedInstructorDto
-            {
-                Id = selectedInstructorId,
+                Id = lstListe.SelectedValue.ToString(),
                 Name = txtAd.Text,
                 Surname = txtSoyad.Text,
                 Email = txtEmail.Text,
+                PhoneNumber = txtTelefon.Text,
                 Professions = txtUzmanlik.Text,
-                PhoneNumber = txtTelefon.Text
             };
 
             var result = await _instructorService.Update(updatedInstructorDto);
-            MessageBox.Show(result.Message);
             if (result.IsSuccess)
             {
-                ClearForm();
-                await LoadInstructors();
+                MessageBox.Show(result.Message);
             }
-        }
-
-        protected override async void btnList_Click(object sender, EventArgs e)
-        {
-            await LoadInstructors();
-        }
-
-        private async Task LoadInstructors()
-        {
-            var instructors = await _instructorService.GetAllAsync();
-            lstListe.Items.Clear();
-
-            if (instructors.IsSuccess && instructors.Data != null)
+            else
             {
-                foreach (var instructor in instructors.Data)
-                {
-                    lstListe.Items.Add($"{instructor.FullName} - {instructor.Email} - {instructor.Professions} - {instructor.PhoneNumber}");
-                }
+                MessageBox.Show(result.Message);
             }
         }
-
-        private void lstListe_SelectedIndexChanged(object sender, EventArgs e)
+        else
         {
-            if (lstListe.SelectedItem != null)
+            MessageBox.Show(string.Format(UIMessages.ItemNotSelected, "Eğitmen"));
+        }
+
+    }
+
+    protected override async void btnDelete_Click(object sender, EventArgs e)
+    {
+        if(lstListe.SelectedItems != null)
+        {
+            DeletedInstructorDto deletedInstructorDto = new()
             {
-                string selectedItem = lstListe.SelectedItem.ToString();
-                string[] parts = selectedItem.Split(new[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
-
-                selectedInstructorId = parts[0].Replace("ID:", "").Trim();
-
-                var instructors = _instructorService.GetAllAsync().Result;
-                var selectedInstructor = instructors.Data?.FirstOrDefault(i => i.Id == selectedInstructorId);
-
-                if (selectedInstructor != null)
-                {
-                    txtAd.Text = selectedInstructor.Name;
-                    txtSoyad.Text = selectedInstructor.Surname;
-                    txtEmail.Text = selectedInstructor.Email;
-                    txtUzmanlik.Text = selectedInstructor.Professions;
-                    txtTelefon.Text = selectedInstructor.PhoneNumber;
-                }
+                Id = lstListe.SelectedValue.ToString(),
+                Name = txtAd.Text,
+                Surname= txtSoyad.Text, 
+                Email = txtEmail.Text,
+                PhoneNumber = txtTelefon.Text,  
+                Professions= txtUzmanlik.Text,  
+            };
+            var result = await _instructorService.Remove(deletedInstructorDto);  
+            if(result.IsSuccess)
+            {
+                MessageBox.Show(result.Message);
+            }
+            else
+            {
+                MessageBox.Show(result.Message);
             }
         }
-
-        private void ClearForm()
+        else
         {
-            txtAd.Text = string.Empty;
-            txtSoyad.Text = string.Empty;
-            txtEmail.Text = string.Empty;
-            txtUzmanlik.Text = string.Empty;
-            txtTelefon.Text = string.Empty;
-            selectedInstructorId = null;
-        }
-
-        private void InstructorForm_Load(object sender, EventArgs e)
-        {
-            LoadInstructors();
+            MessageBox.Show(string.Format(UIMessages.ItemNotSelected, "Eğitmen"));
         }
     }
+
 }

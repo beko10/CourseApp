@@ -5,6 +5,7 @@ using CourseApp.ServiceLayer.Abstract;
 using CourseApp.ServiceLayer.Utilities.Constants;
 using CourseApp.ServiceLayer.Utilities.Result;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CourseApp.ServiceLayer.Concrete;
 
@@ -143,5 +144,63 @@ public class CourseManager : ICourseService
             return new SuccessDataResult<IEnumerable<GetAllCourseDetailDto>>(courseDetailDtoList, ConstantsMessages.CourseDeleteSuccessMessage);
         }
         return new ErrorDataResult<IEnumerable<GetAllCourseDetailDto>>(null,ConstantsMessages.CourseDeleteFailedMessage);
+    }
+
+    private IResult CourseNameIsNullOrEmpty(string courseName)
+    {
+        if(courseName.IsNullOrEmpty())
+        {
+            return new ErrorResult("Kurs Adı Boş Olamaz");
+        }
+        return new SuccessResult();
+    }
+
+    private async Task<IResult> CourseNameUniqeCheck(string id,string courseName)
+    {
+        var courseNameCheck = await _unitOfWork.Courses.GetAll(false).AnyAsync(c => c.CourseName == courseName);
+        if(!courseNameCheck)
+        {
+            return new ErrorResult("Bu kurs adi ile zaten bir kurs var");
+        }
+        return new SuccessResult();
+    }
+
+    private  IResult CourseNameLenghtCehck(string courseName)
+    {
+        if(courseName.Length < 2 || courseName.Length > 50)
+        {
+            return new ErrorResult("Kurs Adı Uzunluğu 2 - 50 Karakter Arasında Olmalı");
+        }
+        return new SuccessResult();
+    }
+
+    private IResult IsValidDateFormat(string date)
+    {
+        DateTime tempDate;
+        bool isValid = DateTime.TryParse(date, out tempDate);
+
+        if (!isValid)
+        {
+            return new ErrorResult("Geçersiz tarih formatı.");
+        }
+        return new SuccessResult();
+    }
+    private IResult CheckCourseDates(DateTime startDate, DateTime endDate)
+    {
+        if (endDate <= startDate)
+        {
+            return new ErrorResult("Bitiş tarihi, başlangıç tarihinden sonra olmalıdır.");
+        }
+        return new SuccessResult();
+    }
+    
+    private IResult CheckInstructorNameIsNullOrEmpty(string instructorName)
+    {
+        if (string.IsNullOrEmpty(instructorName))
+        {
+            return new ErrorResult("Eğitmen alanı boş olamaz");
+        }
+
+        return new SuccessResult();
     }
 }
