@@ -13,5 +13,9 @@ public class RegistrationMapping:Profile
         CreateMap<Registration,CreateRegistrationDto>().ReverseMap();
         CreateMap<Registration,UpdatedRegistrationDto>().ReverseMap();
         CreateMap<Registration,DeleteRegistrationDto>().ReverseMap();
+        CreateMap<Registration,GetAllRegistrationDetailDto>()
+            .ForMember(dst => dst.CourseName,opt => opt.MapFrom(src => src.Course!.CourseName))
+            .ForMember(dst => dst.StudentName,opt => opt.MapFrom(src => src.Student!.Name))
+            .ReverseMap();
     }
 }

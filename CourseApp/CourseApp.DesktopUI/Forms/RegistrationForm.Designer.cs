@@ -118,7 +118,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(749, 491);
+            ClientSize = new Size(836, 548);
             Controls.Add(groupBox2);
             Name = "RegistrationForm";
             Text = "RegistrationForm";

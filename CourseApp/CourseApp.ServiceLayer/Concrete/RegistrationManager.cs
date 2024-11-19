@@ -79,4 +79,17 @@ public class RegistrationManager : IRegistrationService
         }
         return new SuccessResult(ConstantsMessages.RegistrationUpdateFailedMessage);
     }
+
+    public async Task<IDataResult<IEnumerable<GetAllRegistrationDetailDto>>> GetAllRegistrationDetailAsync(bool track = true)
+    {
+        var registrationData = await _unitOfWork.Registrations.GetAllRegistrationDetail(track).ToListAsync();
+        
+        if(!registrationData.Any())
+        {
+            return new ErrorDataResult<IEnumerable<GetAllRegistrationDetailDto>>(null,ConstantsMessages.RegistrationListFailedMessage);
+        }
+
+        var registrationDataMapping = _mapper.Map<IEnumerable<GetAllRegistrationDetailDto>>(registrationData);
+        return new SuccessDataResult<IEnumerable<GetAllRegistrationDetailDto>>(registrationDataMapping, ConstantsMessages.RegistrationListSuccessMessage);  
+    }
 }

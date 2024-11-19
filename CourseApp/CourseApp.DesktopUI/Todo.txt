@@ -14,10 +14,11 @@ Course, Exam, ExamResult, Instructor, Student, Registration, Lesson
 
 5-Ana menüden yer alan iþlemler menusu altýnda öðrenci kayýt iþlemi yapýlacaktýr. 
 
-6-Form1 isimli ana form üzerinde bazý istatistiki bilgiler bulunmaktadýr. Bunlarýnda kodlanmasý gerekmektedir.
+6-MainForm isimli ana form üzerinde bazý istatistiki bilgiler bulunmaktadýr. Bunlarýnda kodlanmasý gerekmektedir.
 
 NOT: Tüm formlarda sabit olarak kaydet, sil, güncelle, listele butonlarýnýn var olmasýný aðlamak için bir adet BaseForm oluþturulmuþ ve oluþturulan tüm formlar bu baseformdan türetilmiþtir. 
 Bu nedenle kaydet vs. butonlarýnýn click eventi yoktur. Ýlgili formun backend kýsmýndý override ederek eriþebilir ve kullanabilirsiniz.
 
 
-
+Kalan kýsýmlar 
+Lesson ve registration formlar kodlanacak 

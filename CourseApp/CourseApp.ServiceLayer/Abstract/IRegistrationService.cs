@@ -11,4 +11,5 @@ public interface IRegistrationService
     Task<IResult> CreateAsync(CreateRegistrationDto entity);
     Task<IResult> Update(UpdatedRegistrationDto entity);
     Task<IResult> Remove(DeleteRegistrationDto entity);
+    Task<IDataResult<IEnumerable<GetAllRegistrationDetailDto>>> GetAllRegistrationDetailAsync(bool track = true);
 }

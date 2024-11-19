@@ -117,7 +117,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(731, 481);
+            ClientSize = new Size(734, 481);
             Controls.Add(lstListe);
             Controls.Add(groupBox2);
             Name = "ExamResultForm";
