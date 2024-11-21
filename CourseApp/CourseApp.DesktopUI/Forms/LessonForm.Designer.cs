@@ -30,9 +30,11 @@
         {
             lstLessonList = new ListBox();
             groupBox2 = new GroupBox();
+            cmbCourse = new ComboBox();
             txtLessonTime = new MaskedTextBox();
             label7 = new Label();
             label6 = new Label();
+            label1 = new Label();
             label4 = new Label();
             label9 = new Label();
             label5 = new Label();
@@ -40,9 +42,7 @@
             txtLessonDuration = new TextBox();
             txtLessonName = new TextBox();
             dtLessonDate = new DateTimePicker();
-            comboBox1 = new ComboBox();
-            label1 = new Label();
-            button1 = new Button();
+            btn_DersiKursaAta = new Button();
             groupBox2.SuspendLayout();
             SuspendLayout();
             // 
@@ -57,7 +57,7 @@
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(comboBox1);
+            groupBox2.Controls.Add(cmbCourse);
             groupBox2.Controls.Add(txtLessonTime);
             groupBox2.Controls.Add(label7);
             groupBox2.Controls.Add(label6);
@@ -75,6 +75,14 @@
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "DERS KAYIT FORMU";
+            // 
+            // cmbCourse
+            // 
+            cmbCourse.FormattingEnabled = true;
+            cmbCourse.Location = new Point(170, 38);
+            cmbCourse.Name = "cmbCourse";
+            cmbCourse.Size = new Size(361, 35);
+            cmbCourse.TabIndex = 5;
             // 
             // txtLessonTime
             // 
@@ -100,6 +108,15 @@
             label6.Size = new Size(137, 27);
             label6.TabIndex = 3;
             label6.Text = "Ders Süresi";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(6, 46);
+            label1.Name = "label1";
+            label1.Size = new Size(153, 27);
+            label1.TabIndex = 3;
+            label1.Text = "Kurs Seçiniz:";
             // 
             // label4
             // 
@@ -157,38 +174,21 @@
             dtLessonDate.Size = new Size(361, 35);
             dtLessonDate.TabIndex = 2;
             // 
-            // comboBox1
+            // btn_DersiKursaAta
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(170, 38);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(361, 35);
-            comboBox1.TabIndex = 5;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(6, 46);
-            label1.Name = "label1";
-            label1.Size = new Size(153, 27);
-            label1.TabIndex = 3;
-            label1.Text = "Kurs Seçiniz:";
-            // 
-            // button1
-            // 
-            button1.Location = new Point(188, 521);
-            button1.Name = "button1";
-            button1.Size = new Size(376, 58);
-            button1.TabIndex = 4;
-            button1.Text = "Bu Dersi Kursa Ata >>";
-            button1.UseVisualStyleBackColor = true;
+            btn_DersiKursaAta.Location = new Point(188, 521);
+            btn_DersiKursaAta.Name = "btn_DersiKursaAta";
+            btn_DersiKursaAta.Size = new Size(376, 58);
+            btn_DersiKursaAta.TabIndex = 4;
+            btn_DersiKursaAta.Text = "Bu Dersi Kursa Ata >>";
+            btn_DersiKursaAta.UseVisualStyleBackColor = true;
             // 
             // LessonForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(888, 612);
-            Controls.Add(button1);
+            Controls.Add(btn_DersiKursaAta);
             Controls.Add(lstLessonList);
             Controls.Add(groupBox2);
             Name = "LessonForm";
@@ -196,7 +196,7 @@
             Load += LessonForm_Load;
             Controls.SetChildIndex(groupBox2, 0);
             Controls.SetChildIndex(lstLessonList, 0);
-            Controls.SetChildIndex(button1, 0);
+            Controls.SetChildIndex(btn_DersiKursaAta, 0);
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
             ResumeLayout(false);
@@ -216,8 +216,8 @@
         private TextBox txtLessonDuration;
         private TextBox txtLessonName;
         private DateTimePicker dtLessonDate;
-        private ComboBox comboBox1;
+        private ComboBox cmbCourse;
         private Label label1;
-        private Button button1;
+        private Button btn_DersiKursaAta;
     }
 }

@@ -26,7 +26,7 @@ namespace CourseApp.DesktopUI.Forms
             await LoadStudent();
             await LoadExam();
             await LoadExamResult();
-            lstListe.SelectedIndexChanged += lstListe_SelectedIndexChanged;
+            lstListe.SelectedIndexChanged += lstListe_SelectedIndexChanged!;
         }
 
         private async Task LoadStudent()
@@ -80,7 +80,7 @@ namespace CourseApp.DesktopUI.Forms
 
             if (lstListe.SelectedItem != null)
             {
-                string examResultId = lstListe.SelectedValue.ToString();
+                string examResultId = lstListe.SelectedValue!.ToString()!;
 
                 var examResult = await _examResultService.GetByIdExamResultDetailAsync(examResultId);
 

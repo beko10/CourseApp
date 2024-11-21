@@ -10,9 +10,15 @@ public class LessonMapping:Profile
     public LessonMapping()
     {
         CreateMap<Lesson, GetAllLessonDto>().ReverseMap();
-        CreateMap<Instructor, GetByIdLessonDto>().ReverseMap();
-        CreateMap<Instructor, CreateLessonDto>().ReverseMap();
-        CreateMap<Instructor, DeleteLessonDto>().ReverseMap();
-        CreateMap<Instructor, UpdateLessonDto>().ReverseMap();
+        CreateMap<Lesson, GetByIdLessonDto>().ReverseMap();
+        CreateMap<Lesson, CreateLessonDto>().ReverseMap();
+        CreateMap<Lesson, DeleteLessonDto>().ReverseMap();
+        CreateMap<Lesson, UpdateLessonDto>().ReverseMap();
+        CreateMap<Lesson, GetAllLessonDetailDto>()
+                .ForMember(dst => dst.CourseName,opt => opt.MapFrom(src => src.Course!.CourseName))
+                .ReverseMap();
+        CreateMap<Lesson,GetByIdLessonDetailDto>()
+                .ForMember(dst => dst.CourseName,opt => opt.MapFrom(src => src.Course!.CourseName))
+                .ReverseMap();
     }
 }

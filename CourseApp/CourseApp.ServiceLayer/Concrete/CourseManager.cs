@@ -30,7 +30,7 @@ public class CourseManager : ICourseService
             InstructorID = course.InstructorID,
             IsActive = course.IsActive,
             StartDate = course.StartDate
-        });
+        }).ToList();
 
         return new SuccessDataResult<IEnumerable<GetAllCourseDto>>(result, ConstantsMessages.CourseListSuccessMessage);
     }

@@ -11,4 +11,6 @@ public interface ILessonService
     Task<IResult> CreateAsync(CreateLessonDto entity);
     Task<IResult> Update(UpdateLessonDto entity);
     Task<IResult> Remove(DeleteLessonDto entity);
+    Task<IDataResult<IEnumerable<GetAllLessonDetailDto>>> GetAllLessonDetailAsync(bool track = true);
+    Task<IDataResult<GetByIdLessonDetailDto>> GetByIdLessonDetailAsync(string id, bool track = true);
 }

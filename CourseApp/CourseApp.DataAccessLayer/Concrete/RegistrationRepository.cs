@@ -24,4 +24,16 @@ public class RegistrationRepository : GenericRepository<Registration>, IRegistra
         return query.Include(r => r.Course)
                     .Include(r => r.Student);
     }
+
+    public async Task<Registration> GetByIdRegistrationDetail(string id,bool track = true)
+    {
+        var query = _dbSet.AsQueryable();
+        if (!track)
+        {
+            query = query.AsNoTracking();
+        }
+        return (await query.Include(r => r.Course)
+                           .Include(r => r.Student)
+                           .FirstOrDefaultAsync(r => r.ID == id))!;
+    }
 }

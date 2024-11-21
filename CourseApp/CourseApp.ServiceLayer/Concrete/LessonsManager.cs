@@ -79,4 +79,26 @@ public class LessonsManager : ILessonService
         }
         return new SuccessResult(ConstantsMessages.LessonUpdateFailedMessage);
     }
+
+    public async Task<IDataResult<IEnumerable<GetAllLessonDetailDto>>> GetAllLessonDetailAsync(bool track = true)
+    {
+        var lessonList = await _unitOfWork.Lessons.GetAllLessonDetails(false).ToListAsync();
+        if(!lessonList.Any())
+        {
+            return new ErrorDataResult<IEnumerable<GetAllLessonDetailDto>>(null, ConstantsMessages.LessonListFailedMessage);
+        }
+        var lessonsListMapping = _mapper.Map<IEnumerable<GetAllLessonDetailDto>>(lessonList);   
+        return new SuccessDataResult<IEnumerable<GetAllLessonDetailDto>>(lessonsListMapping, ConstantsMessages.LessonListSuccessMessage);
+    }
+
+    public async Task<IDataResult<GetByIdLessonDetailDto>> GetByIdLessonDetailAsync(string id, bool track = true)
+    {
+        var lesson = await _unitOfWork.Lessons.GetByIdLessonDetailsAsync(id, false);
+        if(lesson == null)
+        {
+            return new ErrorDataResult<GetByIdLessonDetailDto>(null, ConstantsMessages.LessonGetByIdFailedMessage);
+        }
+        var lessonMapping = _mapper.Map<GetByIdLessonDetailDto>(lesson);
+        return new SuccessDataResult<GetByIdLessonDetailDto>(lessonMapping);
+    }
 }

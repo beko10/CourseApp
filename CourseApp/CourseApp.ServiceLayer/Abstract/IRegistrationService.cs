@@ -1,5 +1,4 @@
-﻿using CourseApp.EntityLayer.Dto.LessonDto;
-using CourseApp.EntityLayer.Dto.RegistrationDto;
+﻿using CourseApp.EntityLayer.Dto.RegistrationDto;
 using CourseApp.ServiceLayer.Utilities.Result;
 
 namespace CourseApp.ServiceLayer.Abstract;
@@ -12,4 +11,5 @@ public interface IRegistrationService
     Task<IResult> Update(UpdatedRegistrationDto entity);
     Task<IResult> Remove(DeleteRegistrationDto entity);
     Task<IDataResult<IEnumerable<GetAllRegistrationDetailDto>>> GetAllRegistrationDetailAsync(bool track = true);
+    Task<IDataResult<GetByIdRegistrationDetailDto>> GetByIdRegistrationDetailAsync(string id, bool track = true);
 }

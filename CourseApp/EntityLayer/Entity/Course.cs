@@ -10,5 +10,5 @@ public class Course : BaseEntity
     public Instructor? Instructor { get; set; }
 
     //navigation property
-    public IQueryable<Lesson>? Lessons { get; set; }
+    public ICollection<Lesson>? Lessons { get; set; } = [];
 }

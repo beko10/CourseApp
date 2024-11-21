@@ -92,4 +92,15 @@ public class RegistrationManager : IRegistrationService
         var registrationDataMapping = _mapper.Map<IEnumerable<GetAllRegistrationDetailDto>>(registrationData);
         return new SuccessDataResult<IEnumerable<GetAllRegistrationDetailDto>>(registrationDataMapping, ConstantsMessages.RegistrationListSuccessMessage);  
     }
+
+    public async Task<IDataResult<GetByIdRegistrationDetailDto>> GetByIdRegistrationDetailAsync(string id, bool track = true)
+    {
+        var registration = await _unitOfWork.Registrations.GetByIdRegistrationDetail(id,false);
+        if(registration == null)
+        {
+            return new ErrorDataResult<GetByIdRegistrationDetailDto>(null, ConstantsMessages.RegistrationGetByIdFailedMessage);
+        }
+        var registrationMapping = _mapper.Map<GetByIdRegistrationDetailDto>(registration);  
+        return new SuccessDataResult<GetByIdRegistrationDetailDto>(registrationMapping, ConstantsMessages.RegistrationGetByIdSuccessMessage);
+    }
 }
