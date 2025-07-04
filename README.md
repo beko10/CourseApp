@@ -185,9 +185,6 @@ Tüm bağımlılıklar `Program.cs` dosyasında yapılandırılmıştır.
 - Repository pattern'i takip edin
 - Dependency Injection kullanın
 
-## 🐛 Bilinen Sorunlar
-
-- [Varsa bilinen sorunları buraya ekleyin]
 
 ## 🤝 Katkıda Bulunma
 
